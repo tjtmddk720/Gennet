@@ -1,0 +1,88 @@
+package Gennet.backend.post.controller;
+
+import Gennet.backend.post.dto.PostDto;
+import Gennet.backend.post.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/posts")
+public class PostController {
+
+    private final PostService postService;
+
+    @Autowired
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
+
+    /**
+     * 모든 게시물 가져오기
+     *
+     * @return 게시물 목록
+     */
+    @GetMapping
+    public ResponseEntity<List<PostDto>> getAllPosts() {
+        List<PostDto> postDtos = postService.getAllPosts();
+        return ResponseEntity.ok(postDtos);
+    }
+
+    /**
+     * 특정 ID의 게시물 가져오기
+     *
+     * @param postId 게시물 ID
+     * @return 게시물 정보
+     */
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
+        PostDto postDto = postService.getPostById(postId);
+        if (postDto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(postDto);
+    }
+
+    /**
+     * 게시물 생성
+     *
+     * @param postDto 게시물 DTO
+     * @return 생성된 게시물 정보
+     */
+    @PostMapping
+    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
+        PostDto createdPostDto = postService.createPost(postDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdPostDto);
+    }
+
+    /**
+     * 게시물 업데이트
+     *
+     * @param postId         게시물 ID
+     * @param updatedPostDto 업데이트할 게시물 DTO
+     * @return 업데이트된 게시물 정보
+     */
+    @PutMapping("/{postId}")
+    public ResponseEntity<PostDto> updatePost(@PathVariable Long postId, @RequestBody PostDto updatedPostDto) {
+        PostDto updatedPost = postService.updatePost(postId, updatedPostDto);
+        if (updatedPost == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedPost);
+    }
+
+    /**
+     * 게시물 삭제
+     *
+     * @param postId 게시물 ID
+     * @return 삭제 결과
+     */
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
+        return ResponseEntity.noContent().build();
+    }
+}
