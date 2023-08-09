@@ -24,6 +24,8 @@ public class MemberController {
     public final MemberService memberService;
     public final MemberMapper memberMapper;
 
+    // Security 적용 시 회원가입 시 회원의 인증과 관련된 정보(패스워드, 사용자 권한) 필요
+
     /** 회원 가입 **/
     @PostMapping("/signup")
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.SignUpDto requestbody) {
@@ -63,8 +65,8 @@ public class MemberController {
         requestbody.addMemberId(memberId);
         Member member = memberMapper.memberUpdateDtoToMember(requestbody);
 
-        Member updateMember = memberService.updateMember(member);
+        Member updatedMember = memberService.updateMember(member);
 
-        return new ResponseEntity<>(memberMapper.memberToUpdateResponseDto(updateMember),HttpStatus.OK);
+        return new ResponseEntity<>(memberMapper.memberToUpdateResponseDto(updatedMember),HttpStatus.OK);
     }
 }

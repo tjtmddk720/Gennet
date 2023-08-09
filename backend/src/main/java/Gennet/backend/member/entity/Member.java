@@ -28,6 +28,10 @@ public class Member extends Auditable {
     private String dateOfBirth;
     private String introduction;
     private float avgStarRate;
+
+    //사용자 등록 시, 사용자의 권한을 등록하기 위한 권한 테이블을 생성
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
     @Enumerated(value = EnumType.STRING)
     private memberType memberType;
     @Enumerated(value = EnumType.STRING)
