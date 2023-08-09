@@ -18,5 +18,10 @@ public class StarRate {
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
     private Long starRate;
+
+//    @ManyToOne
+//    @JoinColumn(name = "chattingroom_id")
+//    private ChattingRoom chattingRoom;
 }
