@@ -16,3 +16,20 @@ spring:
     properties:
       hibernate:
         format_sql: true  # SQL pretty print
+  sql:
+    init:
+      data-locations: classpath*:db/h2/data.sql
+  logging:
+    level:
+      org:
+        springframework:
+          orm:
+            jpa: DEBUG
+jwt:
+  key: ${JWT_SECRET_KEY}
+
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 420
+mail:
+  address:
+    admin: admin@gmail.com
