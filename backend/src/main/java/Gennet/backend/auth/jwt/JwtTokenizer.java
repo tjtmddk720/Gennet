@@ -1,6 +1,8 @@
 package Gennet.backend.auth.jwt;
 
+import Gennet.backend.member.entity.Member;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -14,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -70,6 +73,21 @@ public class JwtTokenizer {
         return claims;
     }
 
+    /** token으로 memberId 추출 메서드 **/
+    public Long getMemberIdFromToken(String token, String base64EncodedSecretKey){
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+
+        String jwtToken = token.substring("Bearer ".length());
+
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(key).parseClaimsJws(jwtToken);
+
+        Claims claims = claimsJws.getBody();
+
+        Long memberId = claims.get("memberId", Long.class);
+
+        return memberId;
+    }
+
     public void verifySignature(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
@@ -78,6 +96,19 @@ public class JwtTokenizer {
                 .build()
                 .parseClaimsJws(jws);
     }
+
+    public Jws<Claims> verifySignature(String jws){
+
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(secretKey.getBytes())
+                    .build()
+                    .parseClaimsJws(jws);
+        } catch (ExpiredJwtException exception) {
+            throw new RuntimeException();
+        }
+    }
+
 
     // JWT의 만료 일시를 지정, JWT 생성 시 사용
     public Date getTokenExpiration(int expirationMinutes) {
@@ -93,5 +124,23 @@ public class JwtTokenizer {
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return key;
+    }
+
+    /** Access Token 생성 **/
+    public String delegateAccessToken(Member member) {
+        Map<String, Object> claims = new HashMap<>();
+
+        claims.put("memberId", member.getMemberId()); // 식별자 포함
+        claims.put("username", member.getEmail());
+        claims.put("roles", member.getRoles());
+
+        String subject = member.getEmail();
+        Date expiration = getTokenExpiration(getAccessTokenExpirationMinutes());
+
+        String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+
+        String accessToken = generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
+
+        return accessToken;
     }
 }

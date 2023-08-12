@@ -31,6 +31,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter { // request 당
             setAuthenticationToContext(claims); // Authentication 객체를 SecurityContext에 저장하기 위한 메서드(아래 있음)
         } catch (ExpiredJwtException ee) {
             request.setAttribute("exception", ee);
+//            throw new ServletException("Expired Token");
         } catch (Exception e) {
             request.setAttribute("exception", e);
         }
