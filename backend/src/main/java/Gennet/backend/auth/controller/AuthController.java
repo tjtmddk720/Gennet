@@ -15,11 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
-    //Todo : 1. 클라이언트에서 만료된 access token 보냈을 때 만료됐다고 알려줘야함 -> dofilter에 되어있음
-    //       2. 클라이언트에서 access token + refresh token 보내면(재발급 요청) 토큰 검증하고 새로운 access token 발급해줘야함
-    //       3. logout 구현
-    //          현재 -> 만료된 토큰이 500에러로 나옴
-    //                  재발급 안됨
     private final AuthService authService;
 
     /** Access token 재발급 **/
