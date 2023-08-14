@@ -1,25 +1,37 @@
 package Gennet.backend.post.controller;
 
+import Gennet.backend.member.entity.Member;
+import Gennet.backend.member.repository.MemberRepository;
 import Gennet.backend.post.dto.PostDto;
 import Gennet.backend.post.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/posts")
 public class PostController {
 
     private final PostService postService;
+    private final MemberRepository memberRepository;
 
-    @Autowired
-    public PostController(PostService postService) {
-        this.postService = postService;
+    @GetMapping("/")
+    public ResponseEntity<String> handleEmptyPath() {
+        return ResponseEntity.ok("Welcome to the /posts");
     }
 
+    @Autowired
+    public PostController(PostService postService, MemberRepository memberRepository) {
+        this.postService = postService;
+        this.memberRepository = memberRepository;
+    }
     /**
      * 모든 게시물 가져오기
      *
@@ -54,9 +66,24 @@ public class PostController {
      */
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
-        PostDto createdPostDto = postService.createPost(postDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPostDto);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String currentUserId = authentication.getName();
+
+            Optional<Member> currentMemberOptional = memberRepository.findByEmail(currentUserId);
+            if (currentMemberOptional.isPresent()) {
+                PostDto createdPostDto = postService.createPost(postDto, currentMemberOptional.get());
+                return ResponseEntity.status(HttpStatus.CREATED).body(createdPostDto);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
+
+
+
 
     /**
      * 게시물 업데이트

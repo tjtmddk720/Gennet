@@ -36,5 +36,3 @@ public class PostDto {
         this.modified_at = modified_at;
     }
 }
-
-

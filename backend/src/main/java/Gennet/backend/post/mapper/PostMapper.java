@@ -45,4 +45,12 @@ public class PostMapper {
         // created_at 및 modified_at은 엔티티 생성 시 자동 설정됨
         return post;
     }
+    public Post updateFromDto(PostDto postDto, Post post) {
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        post.setImage(postDto.getImage());
+        post.setCategory(Post.lifeCategory.valueOf(postDto.getLifeCategory()));
+        return post;
+    }
+
 }
