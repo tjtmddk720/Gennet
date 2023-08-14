@@ -1,5 +1,9 @@
 package Gennet.backend.post.service;
 
+import Gennet.backend.exception.BusinessLogicException;
+import Gennet.backend.exception.ExceptionCode;
+import Gennet.backend.member.entity.Member;
+import Gennet.backend.member.repository.MemberRepository;
 import Gennet.backend.post.dto.PostDto;
 import Gennet.backend.post.entity.Post;
 import Gennet.backend.post.mapper.PostMapper;
@@ -11,16 +15,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+
 @Service
 public class PostService {
 
     private final PostRepository postRepository;
     private final PostMapper postMapper;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, PostMapper postMapper) {
+    public PostService(PostRepository postRepository, PostMapper postMapper, MemberRepository memberRepository) {
         this.postRepository = postRepository;
         this.postMapper = postMapper;
+        this.memberRepository = memberRepository; // MemberRepository 주입
     }
 
     /**
@@ -52,13 +60,13 @@ public class PostService {
      * @param postDto 게시물 DTO
      * @return 생성된 게시물 정보
      */
-    public PostDto createPost(PostDto postDto) {
+    public PostDto createPost(PostDto postDto, Member currentMember) {
         Post post = postMapper.toEntity(postDto);
-        // Member 엔티티 설정 및 생성 날짜 설정
+        post.setPostMember(currentMember);
+
         Post savedPost = postRepository.save(post);
         return postMapper.toDto(savedPost);
     }
-
     /**
      * 게시물 업데이트
      *
@@ -69,13 +77,10 @@ public class PostService {
     public PostDto updatePost(Long postId, PostDto updatedPostDto) {
         Optional<Post> postOptional = postRepository.findById(postId);
         if (postOptional.isPresent()) {
-            Post post = postOptional.get();
-            // Member 엔티티 설정
-            post.setTitle(updatedPostDto.getTitle());
-            post.setContent(updatedPostDto.getContent());
-            post.setImage(updatedPostDto.getImage());
-            post.setCategory(Post.lifeCategory.valueOf(updatedPostDto.getLifeCategory())); // String 값을 enum으로 변환
-            post.setStatus(Post.postStatus.valueOf(updatedPostDto.getPostStatus())); // String 값을 enum으로 변환
+            Post post = postOptional.get(); // 수정된 부분: postOptional.get()을 post 변수에 할당
+
+            post = postMapper.updateFromDto(updatedPostDto, post); // 수정된 부분: post를 업데이트
+
             Post updatedPost = postRepository.save(post);
             return postMapper.toDto(updatedPost);
         }
