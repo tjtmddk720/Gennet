@@ -43,7 +43,7 @@ public class SecurityConfiguration {
                 .headers().frameOptions().sameOrigin() // h2에서 사용하기 위함(X-Frame-Options->해당 페이지와 동일한 orgin에 해당하는 frame만 표시)
                 .and()
                 .csrf().disable()        // 로컬에서 진행하므로 CSRF 공격 비활성화
-                .cors(withDefaults())    // corsConfigurationSource라는 이름으로 등록된 Bean을 이용
+                .cors(withDefaults()) // corsConfigurationSource라는 이름으로 등록된 Bean을 이용
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // 세션을 생성하지 않도록 설정
                 .and()
                 .formLogin().disable()   // JSON포맷으로 username과 password 전송하는 방식 사용
@@ -62,7 +62,6 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -72,8 +71,15 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));   // 모든 출처(Origin)에 대해 스크립트 기반의 HTTP 통신을 허용하도록 설정
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE"));  // 파라미터로 지정한 HTTP Method에 대한 HTTP 통신을 허용
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/","http://localhost:8080/"));   // 모든 출처(Origin)에 대해 스크립트 기반의 HTTP 통신을 허용하도록 설정
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE", "OPTIONS"));  // 파라미터로 지정한 HTTP Method에 대한 HTTP 통신을 허용
+
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        // 응답 헤더에 노출
+        configuration.setExposedHeaders(Arrays.asList("*", "Authorization", "Refresh"));
+
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(86400L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();   // CorsConfigurationSource 인터페이스의 구현 클래스의 객체 생성
         source.registerCorsConfiguration("/**", configuration); //모든 URL에 앞에서 구성한 CORS 정책 적용
