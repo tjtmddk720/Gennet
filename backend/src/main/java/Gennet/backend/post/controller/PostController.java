@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,16 +21,12 @@ public class PostController {
     private final PostService postService;
     private final MemberRepository memberRepository;
 
-    @GetMapping("/")
-    public ResponseEntity<String> handleEmptyPath() {
-        return ResponseEntity.ok("Welcome to the /posts");
-    }
-
     @Autowired
     public PostController(PostService postService, MemberRepository memberRepository) {
         this.postService = postService;
         this.memberRepository = memberRepository;
     }
+
     /**
      * 모든 게시물 가져오기
      *
@@ -67,22 +62,16 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            String currentUserId = authentication.getName();
+        String userEmail = authentication.getName(); // 현재 로그인된 회원의 이메일
 
-            Optional<Member> currentMemberOptional = memberRepository.findByEmail(currentUserId);
-            if (currentMemberOptional.isPresent()) {
-                PostDto createdPostDto = postService.createPost(postDto, currentMemberOptional.get());
-                return ResponseEntity.status(HttpStatus.CREATED).body(createdPostDto);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+        Optional<Member> currentMemberOptional = memberRepository.findByEmail(userEmail);
+        if (currentMemberOptional.isPresent()) {
+            PostDto createdPostDto = postService.createPost(postDto, currentMemberOptional.get());
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdPostDto);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
-
 
 
     /**

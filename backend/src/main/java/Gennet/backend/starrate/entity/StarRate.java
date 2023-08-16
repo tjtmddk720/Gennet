@@ -15,12 +15,16 @@ public class StarRate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long starRateId;
+
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    private Long starRate;
+    @ManyToOne
+    @JoinColumn(name = "RATED_MEMBER_ID")
+    private Member ratedMember;
 
+    private Long rating;
 //    @ManyToOne
 //    @JoinColumn(name = "chattingroom_id")
 //    private ChattingRoom chattingRoom;

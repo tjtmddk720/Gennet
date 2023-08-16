@@ -1,5 +1,6 @@
 package Gennet.backend.starrate.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,8 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class StarRateDto {
-    private Long starRateId;
     private Long memberId;
-    private Long chattingRoomId;
-    private Long starRate;
+    private Long ratedMemberId;
+    private Long rating;
 }
