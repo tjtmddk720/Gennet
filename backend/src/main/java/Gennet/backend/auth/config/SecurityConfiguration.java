@@ -9,6 +9,7 @@ import Gennet.backend.auth.handler.MemberAuthenticationSuccessHandler;
 import Gennet.backend.auth.jwt.JwtTokenizer;
 import Gennet.backend.auth.repository.AuthRepository;
 import Gennet.backend.auth.utils.CustomAuthorityUtils;
+import Gennet.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,7 @@ public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final AuthRepository authRepository;
+    private final MemberRepository memberRepository;
 
 
     @Bean
@@ -93,7 +95,7 @@ public class SecurityConfiguration {
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer,authRepository);  //  AuthenticationManager와 JwtTokenizer를 DI
             jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
-            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());  //
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler(memberRepository));  //
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());  //
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);  // JwtVerificationFilter의 인스턴스를 생성하면서 JwtVerificationFilter에서 사용되는 객체들을 생성자로 DI
