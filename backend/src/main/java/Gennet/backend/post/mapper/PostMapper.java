@@ -37,9 +37,13 @@ public class PostMapper {
         postMember.setMemberId(postDto.getPostMemberId()); // postDto로부터 받은 값 사용
         post.setPostMember(postMember);
 
-        Member matchingMember = new Member();
-        matchingMember.setMemberId(postDto.getMatchingMemberId()); // postDto로부터 받은 값 사용
-        post.setMatchingMember(matchingMember);
+        // matchingMemberId 값이 있는 경우에만 설정
+        if (postDto.getMatchingMemberId() != null) {
+            Member matchingMember = new Member();
+            matchingMember.setMemberId(postDto.getMatchingMemberId()); // postDto로부터 받은 값 사용
+            post.setMatchingMember(matchingMember);
+        }
+
 
         post.setStatus(Post.postStatus.valueOf(postDto.getPostStatus())); // String 값을 enum으로 변환
         // created_at 및 modified_at은 엔티티 생성 시 자동 설정됨
