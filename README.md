@@ -10,7 +10,7 @@
 
 | 조민선<br>(BE Leader) | 서승아<br>(BE) |
 |:--------:| :--------: |
-| <img src="https://avatars.githubusercontent.com/u/87747459?v=4" alt="조민선" width="200" height="200">| <img src="![image](https://github.com/tjtmddk720/Gennet/assets/83910139/900644a6-6463-4157-ac2b-081f40037e4e)
+| <img src="https://avatars.githubusercontent.com/u/87747459?v=4" alt="조민선" width="200" height="200">| <img src="https://github.com/tjtmddk720/Gennet/assets/83910139/900644a6-6463-4157-ac2b-081f40037e4e")
 " alt="서승아" width="200" height="200"> | | 
 |[@MinsunCho-dev](https://github.com/MinsunCho-dev) | [@tjtmddk720](https://github.com/tjtmddk720) |
 | <p align="left">- JWT <br/>- BOARD <br/>- S3 IMAGE <br/>- MYPAGE <br/>- ADD USER <br/>- DEPLOY <br/></p> | <p align="left">- LOCATION <br/>- COMMENT <br/>- STARRATE <br/>- MATE <br/>- DEPLOY <br/></p> | 
