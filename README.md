@@ -10,8 +10,9 @@
 
 | 조민선<br>(BE Leader) | 서승아<br>(BE) |
 |:--------:| :--------: |
-| <img src="https://github.com/codestates-seb/seb44_main_014/assets/101058141/f9021546-f255-4c69-8690-42d7eb1dedce" alt="정민지" width="200" height="200">| <img src="https://github.com/codestates-seb/seb44_main_014/assets/101058141/eaecf455-9651-4de3-acc1-5036bbf349bf" alt="서승아" width="200" height="200"> | | 
-|[@jmjgirl](https://github.com/jmjgirl) | [@tjtmddk720](https://github.com/tjtmddk720) |
+| <img src="https://avatars.githubusercontent.com/u/87747459?v=4" alt="조민선" width="200" height="200">| <img src="![image](https://github.com/tjtmddk720/Gennet/assets/83910139/900644a6-6463-4157-ac2b-081f40037e4e)
+" alt="서승아" width="200" height="200"> | | 
+|[@MinsunCho-dev](https://github.com/MinsunCho-dev) | [@tjtmddk720](https://github.com/tjtmddk720) |
 | <p align="left">- JWT <br/>- BOARD <br/>- S3 IMAGE <br/>- MYPAGE <br/>- ADD USER <br/>- DEPLOY <br/></p> | <p align="left">- LOCATION <br/>- COMMENT <br/>- STARRATE <br/>- MATE <br/>- DEPLOY <br/></p> | 
 
 ## 3. 사용기술스택
