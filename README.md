@@ -26,5 +26,7 @@
 - 시니어, 청년 1대 1 매칭
 
 ## 5. API명세서
+![image](https://github.com/tjtmddk720/Gennet/assets/83910139/095a2c03-22a7-420c-ae3c-caee21f024dc)
+
 ## 6. ERD
 🔖 [ERD URL](https://dbdiagram.io/d/64c7a12102bd1c4a5eface1e)
